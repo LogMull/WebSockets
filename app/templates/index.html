@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WebSocket Test</title>
+    <script src="https://cdn.socket.io/4.5.1/socket.io.min.js"></script>
+  </head>
+  <body>
+    <h2>WebSocket Test</h2>
+    <input type="text" id="messageInput" placeholder="Enter message" />
+    <button onclick="sendMessage()">Send</button>
+    <p id="response"></p>
+
+    <script>
+      // Connect to the WebSocket server (on Docker, you can use localhost)
+      const socket = io('http://192.168.1.24:5000/');
+
+      // Listen for messages from the server
+      socket.on('message', function(msg) {
+        document.getElementById('response').innerText = msg;
+      });
+
+      // Send a message to the server
+      function sendMessage() {
+        const msg = document.getElementById('messageInput').value;
+        socket.send(msg);
+      }
+    </script>
+  </body>
+</html>
