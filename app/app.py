@@ -23,5 +23,9 @@ def handle_message(msg):
     send('Echo: ' + msg)
 
 if __name__ == '__main__':
+    import eventlet
+    import eventlet.wsgi
     # Run the app with SocketIO
-    socketio.run(app, host='0.0.0.0', port=5000)
+    eventlet.wsgi.server(eventlet.listen(('',5000)),app)
+    #socketio.run(app, host='0.0.0.0', port=5000)
+

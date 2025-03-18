@@ -9,7 +9,8 @@ COPY requirements.txt .
 
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
-
+#RUN pip install uwsgi eventlet
+RUN pip install eventlet
 # Copy the Flask app code into the container
 COPY /app /app
 
@@ -18,3 +19,4 @@ EXPOSE 5000
 
 # Command to run the app
 CMD ["python", "app.py"]
+#CMD ["uwsgi", "--ini", "uwsgi.ini"]
