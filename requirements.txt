@@ -1,4 +1,6 @@
 Flask
 Flask-SocketIO
-eventlet
+# eventlet
 flask-cors
+gevent
+gevent-websocket
