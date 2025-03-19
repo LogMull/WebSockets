@@ -1,10 +1,20 @@
 # Use the official Python image as the base image
-FROM python:3.13-slim
+FROM python:3.13-alpine
 
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libssl-dev \
-    python3-dev 
+# RUN apk add --no-cache \
+#     build-base \
+#     openssl-dev \
+#     python3-dev \
+#     musl-dev
+
+RUN apk add --no-cache \
+    build-base \
+    python3-dev \
+    py3-pip \
+    linux-headers \
+    pcre-dev \
+    openssl-dev
+
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -14,8 +24,7 @@ COPY requirements.txt .
 
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
-#RUN pip install uwsgi eventlet
-#RUN pip install eventlet
+
 # Copy the Flask app code into the container
 COPY /app /app
 
