@@ -1,0 +1,37 @@
+# --- Stage 1: Build dependencies ---
+FROM python:3.13-alpine AS builder
+
+RUN apk add --no-cache \
+    build-base \
+    python3-dev \
+    linux-headers \
+    pcre-dev \
+    openssl-dev
+
+WORKDIR /app
+
+# Copy requirements and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+
+# --- Stage 2: Final runtime image ---
+FROM python:3.13-alpine
+
+WORKDIR /app
+
+# Install runtime dependencies
+RUN apk add --no-cache \
+    pcre \
+    openssl
+
+# Copy dependencies from builder stage
+COPY --from=builder /install /usr/local
+
+# Copy the Flask app code
+COPY /app /app
+
+# Expose port 5000
+EXPOSE 5000
+
+# Run uWSGI
+CMD ["uwsgi", "--ini", "uwsgi.ini"]
